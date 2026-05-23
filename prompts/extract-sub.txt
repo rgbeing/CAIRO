@@ -1,0 +1,49 @@
+Your task is to create distinct subjective profiles of a {dataset_domain} item based on user review extractions. 
+Each profile represents a coherent perspective or usage facet that a specific type of consumer might experience.
+
+## Profile Structure
+
+Name
+- 2–4 Title Case words.
+- Capture a consumer experience, usage context, or subjective facet, but NOT a technical specification.
+- Be specific and grounded in the reviews; avoid vague, generic terms.
+
+Description
+- At most 2 sentences in present tense.
+- Describe the item facet (what the item provides/does) using the motivations, criteria, and signals found in the review extractions.
+- If relevant, include constraints or trade-offs mentioned in reviews (e.g., “strong visuals but uneven pacing”).
+
+Evidence_Rationale
+- One sentence that explicitly links this profile to the evidence in the 'Review Extractions'.
+- Must reference a concrete signal from the 'review extractions' (e.g., a mentioned feature, repeated complaint, specific praised element).
+- Must explain why that aspect is a defining characteristic of the item.
+- Start with "This profile is supported by the reviews because..." or a similar phrase.
+
+## Rules
+
+Number of profiles:
+- If only one review is provided: generate exactly 1 profile.
+- Otherwise: generate between 3 and 7 profiles, scaled to the diversity of perspectives in the reviews. Do not pad with weak profiles to reach a higher count.
+
+Minority and critical voices:
+- Preserve critical or minority opinions as separate profiles. Do not merge a positive majority view and a negative minority view into a single neutral profile.
+- The goal is to capture not only popular facets but also meaningful niche or contested ones.
+
+Other:
+- No duplicate or near-duplicate profiles.
+- IDs are sequential P1..Pn; the Name field must not contain the ID.
+
+## Output Format
+Return a single JSON object only. No explanation, no markdown, no text outside the JSON.
+
+{{"profiles":[
+  {{"ID":"P1","Name":"...","Description":"...","Evidence_Rationale":"..."}},
+  {{"ID":"P2","Name":"...","Description":"...","Evidence_Rationale":"..."}},
+  ...
+]}}
+
+## Item Summary (for context)
+{item_summary}
+
+## Review Extractions (primary source)
+{review_extractions}

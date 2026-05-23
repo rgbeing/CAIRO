@@ -1,0 +1,24 @@
+Provide a single high-level summary of the {dataset_domain} consumer preference in detail, by aggregating their review extractions.
+The profile must characterize this user in a way that an expert can directly compare against a set of item profiles and select the best match.
+The profile is expected to describe not only what this user enjoys, but the user's future needs as well.
+
+## Profile Structure
+Write 3–4 sentences in present tense covering these dimensions in order:
+
+1. **Who and how they consume:** Synthesize the user's dominant motivation, consumption pattern, and usage context into a single opening sentence. 
+    Frame around consumer needs and occasions, not product descriptions.
+2. **What they seek:** Describe the genres, themes, or categories this user gravitates toward, and the motivations that drive their purchase decisions.
+    It may include practical needs and situational triggers, not only stable preferences.
+3. **What they value and criticize:** Describe the aspects this user consistently praises and criticizes. 
+    Where possible, note what flaws they will overlook when the core concept or utility is strong enough, and what flaws are genuine disqualifiers.
+4. *(Optional)* If the user shows a clearly divergent pattern across reviews (e.g., tolerates flaws in one context but not another), add a fourth sentence capturing that tension.
+
+## Rules
+- If only one review extraction is available, report only what is directly evidenced; do not generalize to broader patterns.
+- Write in neutral, descriptive language. Do not amplify sentiment beyond what the extractions support.
+
+## Output Format
+Return plain text only — 3 to 4 sentences, no formatting, no labels, no preamble.
+
+## Review Extractions
+{review_extractions}

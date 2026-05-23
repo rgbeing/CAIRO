@@ -1,0 +1,38 @@
+You are given sets of important objective features in {dataset_domain} domain, as a sequence of JSON objects.
+Your task is to consolidate these into a final list of objective features that best explain why a consumer would or would not purchase an item in the {dataset_domain} domain.
+An objective feature is one whose value is factual and universally agreed on, not being dependent on personal opinion, interpretation, or context.
+
+## Guidelines
+- Prioritize features that appear across many input sets — convergence is a signal of importance. 
+- Avoid vague or catch-all features. For example, "special feature" is not valid, as it lacks a clear, scoped meaning.
+- Prefer features that can be expressed concisely in a few words. For example, "genre" is preferred over "user reviews", as genre can be stated briefly.
+- Prefer features with meaningful variation across items. 
+  Avoid features where nearly all items share the same value, or where only a binary yes/no distinction is possible.
+  For example, "nationality" is preferred over "French movie", because it can take more values than yes or no.
+- Prefer features that enables each different items in the metadata section to be distinguished by them.
+- When multiple input features overlap in meaning, consolidate them into one more general feature rather than including near-duplicates. 
+  Do not merge features that are meaningfully distinct.
+
+## Restrictions
+- Each feature must be objective: its value for a given item must be deterministically decidable from factual information, independent of who is asked.
+  For example, "reputation" is NOT valid — its value depends on personal perspective.
+- Every feature must be evidenced by the provided sets. Avoid introducing features that require inference beyond what the metadata explicitly supports.
+
+## Output Format
+Return a single JSON object with one key "features", whose value is an array of feature objects.
+Each feature must be described by three components:
+- feature_name: A concise, clearly scoped label for the feature.
+- feature_description: A general explanation of what factual attribute this feature captures.
+- reason_of_importance: Why this feature could influence a consumer's purchase decision, grounded in evidence from the metadata. 
+  Do not speculate beyond what the data supports.
+
+Example JSON format:
+{{"features": [
+    {{
+    "feature_name": "...",
+    "feature_description": "...",
+    "reason_of_importance": "..."}}, 
+...]}}
+
+## Feature sets to analyze
+{features_sets}

@@ -1,0 +1,22 @@
+You will recieve a user history of item consumption, which consists of item descriptions.
+You are also given candidate items' descriptions.
+Your task is to find the items among the candidates that is most likely to be consumed next by the user having the given history.
+
+## User History
+{history}
+
+## Candidate Items 
+{candidates}
+
+## Output Format
+Your answer must be a single JSON object, and strictly include only a single JSON object.
+Among the keys, "title" is a title of your selected item.
+You MUST select item among the given candidates' titles.
+The key "reason_of_answer" is the reason why you selected it as the next item of the user.
+
+Example JSON format:
+{{
+    "title": ...,
+    "reason_of_answer": ...
+}}
+

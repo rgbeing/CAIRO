@@ -1,0 +1,27 @@
+You will receive a user's profile, item consumption history and a list of candidate items, in {dataset_domain} domain.
+Your task is to rank ALL 20 candidate items from most to least likely by measuring the probabilities that the user would like to buy next.
+
+## Output Format
+Return a single JSON object only. The resulted object must have a key "ranking".
+- "ranking": Ordered array from most to least likely. Each entry must include "rank" (1 stands for the most likely), "asin" (exact ASIN string from the candidate list), and "evidence" (brief reason for the rank).
+- All of the candidates must appear exactly once in the ranking.
+
+Example output:
+{{"ranking": [
+    {{"rank": 1, "asin": "B000000001", "evidence": "..."}},
+    {{"rank": 2, "asin": "B000000002", "evidence": "..."}},
+    {{"rank": 3, "asin": "B000000003", "evidence": "..."}},
+    ...
+]}}
+
+## User Profile
+{user_profile}
+
+## User History
+{history}
+
+## Candidate Items
+{candidates}
+
+## Final Instruct
+Your ranking MUST include ALL of these ASINs, and ONLY these ASINs, sorted by relevance: {asin_list}

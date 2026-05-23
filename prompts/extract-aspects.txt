@@ -1,0 +1,31 @@
+Analyze the following Amazon {dataset_domain} review and extract four distinct user profile elements.
+If there is no clear evidence for an element, return null.
+Do not let elements overlap or substitute for each other.
+Each element must be supported by explicit or implicit evidence from the review text, without introducing unsupported inferences.
+
+**Guiding Principles:**
+1.  **Handle Insufficient Information:** If a review is too vague to extract any element, it is better to return null for all fields than to force an unsupported guess.
+
+**Profile Element Definitions:**
+1.  **category_preference:** The {dataset_domain} genres, themes, or categories the user seems to prefer.
+2.  **purchase_purpose:** The user's motivation for *choosing* this {dataset_domain} (the 'why' before reading). Do NOT base this on usage_context.
+3.  **quality_criteria:** The specific aspects of the {dataset_domain} the user valued or criticized, with sentiment.
+4.  **usage_context:** How, where, or when the user *read* the {dataset_domain} (the situation during reading). Must be distinct from purchase_purpose.
+
+**Output Format:**
+Strict JSON with the following schema. Always return valid JSON only, without additional text or commentary:
+{{
+ "category_preference_reason": "... or null",
+ "category_preference": "... or null",
+ "purchase_purpose_reason": "... or null",
+ "purchase_purpose": "... or null",
+ "quality_criteria_reason": "... or null",
+ "quality_criteria": "... or null",
+ "usage_context_reason": "... or null",
+ "usage_context": "... or null"
+}}
+
+---
+**Review to Analyze:**
+{review}
+

@@ -1,0 +1,49 @@
+You will receive:
+1) A single item description in the {dataset_domain} domain (JSON-formatted text).
+2) A JSON array having "features". Each element contains:
+   - "feature_name": the exact key to output
+   - "feature_description": what to extract and how to interpret it
+Your task is to extract or infer a value for every feature from the item description.
+
+## Extraction Priority
+1. If the value is directly stated in the description, extract it verbatim or paraphrased.
+2. If the value is not stated but can be reasonably inferred from available evidence, infer it and briefly note the basis in "feature_value_reason".
+3. If the value is too vague, you should return null than an unsupported guess.
+
+## Guidelines
+- Use "feature_description" to understand what to look for and how to interpret the value.
+- Express feature values concisely — a word, short phrase, or number is ideal. Use a full sentence only when brevity would lose critical meaning.
+- "feature_value_reason" should be two sentences at most.
+
+## Restrictions
+- The output must include ALL feature_names from the input, with no omissions, no additions.
+- If no value can be extracted or inferred, use null. Do NOT use "N/A", "Not specified", "Unknown", or any other placeholder string.
+
+## Output Format
+Return a single JSON object with one key "extracted_values", whose value is an array. 
+Each element corresponds to one feature from the input, and must include:
+- "feature_name": the exact feature_name string from the input
+- "feature_value": the extracted or inferred value, or null
+- "feature_value_reason": one-sentence basis, or null if feature_value is null
+Every feature in the input must appear as exactly one element in the array with no omissions, no additions.
+
+Example JSON format:
+{{"extracted_values": [
+    {{
+        "feature_name": "feature_name_1",
+        "feature_value": "extracted or inferred value",
+        "feature_value_reason": "one-sentence basis for this value"
+    }},
+    {{
+        "feature_name": "feature_name_2",
+        "feature_value": null,
+        "feature_value_reason": null
+    }},
+    ...
+]}}
+
+## Item description
+{item_description}
+
+## Features
+{features}

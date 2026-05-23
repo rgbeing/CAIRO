@@ -1,0 +1,29 @@
+You are refining a subjective item profile used in a recommendation system.
+The profile describes a specific facet of an item that may appeal to certain users.
+It is used to describe items in a next-item prediction task: the LLM sees item descriptions (including this profile) and must predict which candidate the user will consume next.
+
+## Current Profile
+- Name: {name}
+- Features: {description}
+
+## Identified Weaknesses
+The following weaknesses were identified from cases where the recommendation system made incorrect predictions. 
+Each line describes what information was missing, inaccurate or insufficient in the item descriptions:
+{weaknesses}
+
+## Task
+Based on the weaknesses above, generate {n_versions} revised versions of the profile (Name and Description) that address these weaknesses overall while preserving the profile's core meaning.
+Each revised profile should:
+- Keep the Name as 2-4 Title Case words describing a specific item characteristic.
+- Keep the Description as 2-3 sentences in present tense describing the item facet.
+- Incorporate signals that were identified as missing/insufficient in the weaknesses, and correct any aspects of the current profile that are inaccurate, misleading, or inconsistent with the item description.
+- Be meaningfully different from each other (diverse refinements, not minor rewording).
+- Your generated profile must not have information conflicting to this item description:
+{objective_profile}
+
+Return STRICT JSON:
+{{"refined_profiles": [
+  {{"name": "...", "description": "..."}},
+  {{"name": "...", "description": "..."}},
+  {{"name": "...", "description": "..."}}
+]}}

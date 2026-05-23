@@ -1,0 +1,19 @@
+You was given a next-item prediction task in a recommendation setting.
+
+- The user's item consumption history (a list of item descriptions) is as follows:
+{history}
+- The candidate options to choose from (a list of item descriptions) are as follows:
+{candidates}
+- Your previous prediction was:
+{prediction}
+- But the user actually consumed (ground truth):
+{gt}
+
+## Subjective Profile Used for the Ground-Truth Item
+The following profile was used to describe the appeal of "{gt}" to the user:
+- Name: {profile_name}
+- Description: {profile_description}
+
+Your task is, explain whether this subjective profile was missing key signals, or was inaccurate/misleading in a way that caused the prediction to fail.
+Identify which specific aspect of the profile should be changed and why.
+Your explanation must be in 1 or 2 sentences.
