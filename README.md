@@ -42,6 +42,8 @@ Install the dependencies in your environment:
 pip install -r requirements.txt
 ```
 
+Also, put your openai API key under `llm_config.yaml` file.
+
 ### Data
 
 Due to large sizes of data, we could not provide data directly.
