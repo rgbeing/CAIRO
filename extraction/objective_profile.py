@@ -47,18 +47,6 @@ def cluster_items(item_descriptions, paths_config, device, n_clusters=20):
 
 
 
-def read_cluster_items(paths_config):
-    """Read previously saved cluster labels."""
-    labels = np.load(paths_config['cluster_save_path'])
-    print(f"Loaded cluster labels from {paths_config['cluster_save_path']}")
-
-    unique, counts = np.unique(labels, return_counts=True)
-    cluster_sizes = dict(zip(unique, counts))
-    print("Cluster sizes:", cluster_sizes)
-
-    return labels
-
-
 
 
 def aggregate_candidate_keys(client, feature_init_answers, dataset_domain, paths_config):

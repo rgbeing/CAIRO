@@ -3,7 +3,7 @@ Reranking evaluation on the test set (ASIN-based variant).
 Items are identified by parent_asin in prompts; the LLM returns ASINs directly.
 
 Usage:
-    python -m reranking_alt.main [--device DEVICE] [--use-refined-profiles]
+    python -m reranking.main [--device DEVICE] [--use-refined-profiles]
                                  [--batch-size BATCH_SIZE] [--no-batch]
 """
 import argparse
@@ -312,19 +312,12 @@ def main(args, device, client, paths_config):
     else:
         precomputed_masks = {}
 
-    # Load prompt template 
-    if args.user_profile:
-        with open(paths_config['rerank_alt_prompt_with_user_profile_path'], 'r') as f:
-            rerank_prompt_template = f.read()
-    else:
-        with open(paths_config['rerank_alt_prompt_path'], 'r') as f:
-            rerank_prompt_template = f.read()
+    # Load prompt template
+    with open(paths_config['rerank_prompt_path'], 'r') as f:
+        rerank_prompt_template = f.read()
 
-    # Build user profile lookup (only used when --user_profile is set) 
-    user_profile_lookup = (
-        user_profiles_df.set_index('user_id')['user_profile'].to_dict()
-        if args.user_profile else {}
-    )
+    # Build user profile lookup
+    user_profile_lookup = user_profiles_df.set_index('user_id')['user_profile'].to_dict()
 
     # Build prompts for all test samples
     print("Building reranking prompts...")
@@ -336,7 +329,7 @@ def main(args, device, client, paths_config):
     all_history_asins    = []
     all_candidate_asins  = []
     for sample in tqdm(test_samples, desc="Building prompts"):
-        user_profile_text = user_profile_lookup.get(sample['user_id']) if args.user_profile else None
+        user_profile_text = user_profile_lookup.get(sample['user_id'])
         format_kwargs, asin_to_title, item_obj_features, selected_sub_ids, history_asins, candidate_asins = build_rerank_info(
             sample,
             subjective_profiles_df, objective_profiles_df, user_profiles_df,
@@ -356,33 +349,6 @@ def main(args, device, client, paths_config):
         all_history_asins.append(history_asins)
         all_candidate_asins.append(candidate_asins)
 
-    # Save prompts for inspection/debugging
-    prompts_out_path = './_reranking_alt_prompts.json'
-    if prompts_out_path:
-        with open(prompts_out_path, 'w') as f:
-            json.dump(prompts, f, indent=2)
-        print(f"Prompts saved to {prompts_out_path}")
-
-    # Save reranking information (components) for fast re-runs with template changes
-    rerank_info = []
-    for sample, fmt_kwargs, a2t, item_obj, item_sub, h_asins, c_asins in zip(
-            test_samples, all_format_kwargs, asin_to_title_maps,
-            all_item_obj_features, all_item_sub_features, all_history_asins, all_candidate_asins):
-        rerank_info.append({
-            'user_id':           sample['user_id'],
-            'gt':                sample['gt'],
-            'history_asins':     h_asins,
-            'candidate_asins':   c_asins,
-            'format_kwargs':     fmt_kwargs,
-            'asin_to_title':     a2t,
-            'item_obj_features': item_obj,
-            'item_sub_features': item_sub,
-        })
-    info_path = paths_config.get('rerank_alt_information_path')
-    if info_path:
-        with open(info_path, 'w') as f:
-            json.dump(rerank_info, f, indent=2)
-        print(f"Reranking information saved to {info_path}")
 
     # Query LLM (chunked to avoid overwhelming the Batch API) 
     chunk_size = args.llm_batch_chunk_size
@@ -436,7 +402,7 @@ def main(args, device, client, paths_config):
     print(f"\nEvaluated on {len(gt_ranks)} test samples.")
 
     # Save results 
-    out_path = paths_config.get('rerank_alt_results_save_path')
+    out_path = paths_config.get('rerank_results_save_path')
     if out_path:
         output = {'metrics': metrics, 'results': results}
         with open(out_path, 'w') as f:
@@ -465,8 +431,6 @@ if __name__ == "__main__":
                         help="Max prompts per Batch API job (default: 5000)")
     parser.add_argument('--max_history_len',      type=int,   default=50,
                         help="Truncate each test sample's history to the most recent N items (default: 50)")
-    parser.add_argument('--user_profile', action='store_true',
-                        help="Enable user profile mode (present=True, omitted=False)")
     parser.add_argument('--obj_for_sub', action='store_true',
                         help="Use objective profiles to supplement a subjective profile")
     parser.add_argument('--objective_ablation', type=str, default='selection', choices=['selection', 'random', 'all', 'raw', 'no'])

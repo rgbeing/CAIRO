@@ -20,7 +20,7 @@ We have the prompt templates we use under `prompts` folder.
 
 * $p_\text{rerank}$: `rerank.txt`
 * $p_\text{explore-keys}$: `explore-keys.txt`
-* $p_\text{reassess-\&-merge}$: `reassess-merge.txt`
+* $p_\text{reassess-and-merge}$: `reassess-merge.txt`
 * $p_\text{extract-obj}$: `extract-obj.txt`
 * $p_\text{extract-sub}$: `extract-sub.txt`
 * $p_\text{extract-user-profile}$: `extract-user-profile.txt`
@@ -47,7 +47,9 @@ Also, put your openai API key under `llm_config.yaml` file.
 ### Data
 
 Due to large sizes of data, we could not provide data directly.
-Instead we are providing a small number of datum in each data, which shows the format of each file.
+Instead we are providing a small number of data for each file, which shows the format of the files; a part of Video Games dataset is given under `data/Video_Games` as an example.
+
+Note that `metadata_{dataset_name}.jsonl` and `train_reviews_{dataset_name}.jsonl` has the same format with the original Amazon dataset.
 
 ### Main Framework Execution
 
