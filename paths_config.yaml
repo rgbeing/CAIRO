@@ -1,0 +1,32 @@
+# Paths
+data_path: ./data/Video_Games/metadata_Video_Games.jsonl
+reviews_path: ./data/Video_Games/train_reviews_Video_Games.jsonl
+test_path: ./data/Video_Games/test_Video_Games.jsonl
+# Results paths
+domain_specific_key_save_path: ./data/Video_Games/final_keys.json
+extracted_values_save_path: ./data/Video_Games/extracted_values.jsonl
+objective_profiles_save_path: ./data/Video_Games/objective_profiles.jsonl
+review_aspects_save_path: ./data/Video_Games/review_aspects.json
+subjective_profiles_save_path: ./data/Video_Games/subjective_profiles.json
+user_profiles_save_path: ./data/Video_Games/user_profiles.json
+encoded_item_table_save_path: ./data/Video_Games/encoded_item_table.pkl
+encoded_user_table_save_path: ./data/Video_Games/encoded_user_table.pkl
+fs_dataset_save_path: ./data/Video_Games/FS_{type}_dataset.pkl
+fs_model_save_dir: ./selection/checkpoints
+refine_dataset_save_path: ./data/Video_Games/refine_dataset.pkl
+refine_dataset_df_save_path: ./data/Video_Games/refine_dataset_df.pkl
+refine_checkpoint_save_path: ./data/Video_Games/refine_checkpoint.json 
+refined_subjective_profiles_save_path: ./data/Video_Games/refined_subjective_profiles.json
+rerank_results_save_path: ./data/Video_Games/rerank_results.json
+
+# Prompts paths
+feature_init_prompt_path: ./prompts/explore-keys.txt
+feature_agg_prompt_path: ./prompts/reassess-merge.txt
+extract_keys_prompt_path: ./prompts/extract-obj.txt
+review_aspects_prompt_path: ./prompts/extract-aspects.txt
+subjective_profile_prompt_path: ./prompts/extract-sub.txt
+user_profile_prompt_path: ./prompts/extract-user-profile.txt
+rerank_to_refine_prompt_path: ./prompts/rerank-proxy.txt
+infer_error_reason_prompt_path: ./prompts/analyze-error.txt
+refine_profile_prompt_path: ./prompts/refine-trait.txt
+rerank_prompt_path: ./prompts/rerank.txt

@@ -1,0 +1,1 @@
+python -m profiler.main --k 4 --n_neg_per_pos 3 --lr 0.001

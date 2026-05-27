@@ -1,0 +1,1 @@
+python -m extraction.main --dataset_domain Video_Games --device 0

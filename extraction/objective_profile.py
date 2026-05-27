@@ -41,7 +41,6 @@ def cluster_items(item_descriptions, paths_config, device, n_clusters=20):
     cluster_sizes = dict(zip(unique, counts))
 
     print("Cluster sizes:", cluster_sizes)
-    np.save(paths_config['cluster_save_path'], labels)
 
     return labels
 
@@ -114,15 +113,12 @@ def aggregate_candidate_keys(client, feature_init_answers, dataset_domain, paths
     print(f"Chunk size: {chunk_size}")
     print("========================================\n")
 
-    # Store all iterations for inspection
     current_answers = feature_init_answers.copy()
-    all_iterations = [current_answers]
 
     # Keep aggregating until we have only 1 answer
     while len(current_answers) > 1:
         iteration += 1
-        aggregated_answers = []
-        
+
         print("\n========================================")
         print(f"ITERATION {iteration}")
         print("========================================\n")
@@ -138,12 +134,8 @@ def aggregate_candidate_keys(client, feature_init_answers, dataset_domain, paths
             chunk_prompts.append(prompt)
 
         # Query the API for all chunks concurrently
-        aggregated_answers = ask_prompts(client, chunk_prompts, batch_process=False, response_format_type='json_object', json_schema=expected_answer_json_schema)
+        current_answers = ask_prompts(client, chunk_prompts, batch_process=False, response_format_type='json_object', json_schema=expected_answer_json_schema)
 
-        # Update current_answers for next iteration
-        current_answers = aggregated_answers
-        all_iterations.append(current_answers)
-        
         print(f"\n Iteration {iteration} complete: {len(current_answers)} aggregated answers")
     
     print("\n========================================")
@@ -152,24 +144,14 @@ def aggregate_candidate_keys(client, feature_init_answers, dataset_domain, paths
 
     # The final answer
     final_answer = current_answers[0]
-    # Save the final answer
-    with open(paths_config['final_key_save_path'], 'w') as f:
+    with open(paths_config['domain_specific_key_save_path'], 'w') as f:
         json.dump({
             'final_answer': final_answer,
             'total_iterations': iteration,
-            'initial_count': len(all_iterations[0]),
             'chunk_size': chunk_size
         }, f, indent=2)
 
-    # Save all iterations for inspection
-    with open(paths_config['all_iter_save_path'], 'w') as f:
-        json.dump({
-            f'iteration_{i}': answers 
-            for i, answers in enumerate(all_iterations)
-        }, f, indent=2)
-
-    print(f"Final answer saved to '{paths_config['final_key_save_path']}'")
-    print(f"All iterations saved to '{paths_config['all_iter_save_path']}'")
+    print(f"Final answer saved to '{paths_config['domain_specific_key_save_path']}'")
 
     return final_answer
 
@@ -251,10 +233,6 @@ def generate_candidate_keys_per_cluster(client, dataset_domain, item_description
             candidate_keys_by_cluster[cluster_id] = []
         candidate_keys_by_cluster[cluster_id].append(response)
 
-    with open(paths_config['candidate_key_save_path'], 'w') as f:
-        json.dump(candidate_keys_by_cluster, f, indent=2)
-
-    print(f"Saved raw candidate keys to {paths_config['candidate_key_save_path']}")
     return candidate_keys_by_cluster
 
 
@@ -326,11 +304,6 @@ def aggregate_keys_per_cluster(client, dataset_domain, candidate_keys_by_cluster
         cluster_agg_keys[cluster_id] = current_answers[0]
         print(f"  Aggregation complete")
 
-    with open(paths_config['cluster_agg_key_save_path'], 'w') as f:
-        json.dump(cluster_agg_keys, f, indent=2)
-
-    print(f"\nSaved cluster aggregated keys to {paths_config['cluster_agg_key_save_path']}")
-
     ordered_keys = [cluster_agg_keys[i] for i in sorted(cluster_agg_keys.keys())]
     return ordered_keys
 
@@ -366,11 +339,11 @@ def initialize_key_per_cluster(client, dataset_domain, item_descriptions, paths_
 
 def read_key(paths_config):
     """Read previously saved final key."""
-    with open(paths_config['final_key_save_path'], 'r') as f:
+    with open(paths_config['domain_specific_key_save_path'], 'r') as f:
         data = json.load(f)
     
     final_key = data['final_answer']
-    print(f"Loaded final key from {paths_config['final_key_save_path']}")
+    print(f"Loaded final key from {paths_config['domain_specific_key_save_path']}")
     print(f"Total iterations: {data.get('total_iterations', 'N/A')}")
     print(f"Initial count: {data.get('initial_count', 'N/A')}")
     return final_key
